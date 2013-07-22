@@ -11,10 +11,6 @@ var questionWidget = widget({
     }
 });
 
-var widgets = {
-    "learnsomesql/question": questionWidget
-};
-
 knockout.bindingHandlers.widget = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var options = knockout.unwrap(valueAccessor());
@@ -27,7 +23,7 @@ knockout.bindingHandlers.widget = {
         var optionsWithElement = Object.create(options);
         optionsWithElement.element = widgetElement;
         
-        widgets[name](optionsWithElement);
+        viewModel.__widgets[name](optionsWithElement);
         
         return {
             controlsDescendantBindings: true
@@ -44,6 +40,9 @@ exports.renderLesson = widget({
             viewModel: new LessonViewModel(options.lesson),
             template: lessonTemplate
         };
+    },
+    dependencies: {
+        "question": questionWidget
     }
 });
 
@@ -51,12 +50,11 @@ function widget(widgetOptions) {
     return function(instanceOptions) {
         var result = widgetOptions.init(instanceOptions);
         var viewModel = result.viewModel;
+        viewModel.__widgets = widgetOptions.dependencies;
         var template = result.template;
         
         var element = instanceOptions.element;
-        
         element.innerHTML = template;
-        
         knockout.applyBindings(viewModel, element);
     };
 }
