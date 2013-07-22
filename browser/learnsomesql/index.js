@@ -13,8 +13,8 @@ var questionWidget = widget({
 
 knockout.bindingHandlers.widget = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-        var options = knockout.unwrap(valueAccessor());
-        var name = options.name;
+        var name = knockout.unwrap(valueAccessor());
+        var options = knockout.unwrap(allBindingsAccessor().widgetViewModel);
         // TODO: work out how to avoid ugly double-<div>ing
         
         var widgetElement = document.createElement("div"); 
