@@ -1,0 +1,6 @@
+{
+  "name": "learnsomesql-web",
+  "version": "0.0.1",
+  "local": ["learnsomesql"],
+  "paths": ["browser"]
+}

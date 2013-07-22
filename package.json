@@ -1,0 +1,13 @@
+{
+  "name": "learnsomesql-web",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "nodeunit": "~0.8.1",
+    "component": "~0.17.0",
+    "connect": "~2.8.4"
+  },
+  "scripts": {
+    "test": "nodeunit tests/*.tests.js"
+  }
+}
