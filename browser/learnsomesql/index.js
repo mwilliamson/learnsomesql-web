@@ -1,17 +1,29 @@
 var knockout = require("knockout");
 var lessonTemplate = require("./lesson-template.html");
 
+exports.renderLesson = widget({
+    init: function(options) {
+        return {
+            viewModel: new LessonViewModel(options.lesson),
+            template: lessonTemplate
+        };
+    }
+});
 
-exports.renderLesson = function(options) {
-    var element = options.element;
-    var lesson = options.lesson;
-    
-    var viewModel = new LessonViewModel(lesson);
-    
-    element.innerHTML = lessonTemplate;
-    
-    knockout.applyBindings(viewModel, element);
-};
+function widget(widgetOptions) {
+    return function(instanceOptions) {
+        var result = widgetOptions.init(instanceOptions);
+        var viewModel = result.viewModel;
+        var template = result.template;
+        
+        var element = instanceOptions.element;
+        
+        element.innerHTML = template;
+        
+        knockout.applyBindings(viewModel, element);
+    };
+}
+
 
 function LessonViewModel(lesson) {
     this.title = lesson.title;
