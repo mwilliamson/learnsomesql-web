@@ -7,13 +7,9 @@ knockout.bindingHandlers.widget = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var name = knockout.unwrap(valueAccessor());
         var options = knockout.unwrap(allBindingsAccessor().widgetOptions);
-        // TODO: work out how to avoid ugly double-<div>ing
-        
-        var widgetElement = document.createElement("div"); 
-        knockout.virtualElements.prepend(element, widgetElement)
         
         var optionsWithElement = Object.create(options);
-        optionsWithElement.element = widgetElement;
+        optionsWithElement.element = element;
         
         var widgets = findWidgets(bindingContext);
 
@@ -47,8 +43,13 @@ function widget(widgetOptions) {
         var template = result.template;
         
         var element = instanceOptions.element;
-        element.innerHTML = template;
-        knockout.applyBindings(viewModel, element);
+
+        var temporaryElement = document.createElement("div");
+        temporaryElement.innerHTML = template;
+        var nodes = Array.prototype.slice.call(temporaryElement.childNodes, 0);
+        knockout.virtualElements.setDomNodeChildren(element, nodes);
+
+        knockout.applyBindingsToDescendants(viewModel, element);
     };
 }
 
