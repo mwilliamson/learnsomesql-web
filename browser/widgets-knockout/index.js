@@ -15,13 +15,27 @@ knockout.bindingHandlers.widget = {
         var optionsWithElement = Object.create(options);
         optionsWithElement.element = widgetElement;
         
-        viewModel.__widgets[name](optionsWithElement);
+        var widgets = findWidgets(bindingContext);
+
+        widgets[name](optionsWithElement);
         
         return {
             controlsDescendantBindings: true
         };
     }
 };
+
+function findWidgets(bindingContext) {
+    if (bindingContext.$data.__widgets) {
+        return bindingContext.$data.__widgets;
+    }
+    for (var i = 0; i < bindingContext.$parents.length; i++) {
+        if (bindingContext.$parents[i].__widgets) {
+            return bindingContext.$parents[i].__widgets;
+        }
+    }
+    return {};
+}
 
 knockout.virtualElements.allowedBindings.widget = true;
 
