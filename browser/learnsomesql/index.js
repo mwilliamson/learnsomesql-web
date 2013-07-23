@@ -32,6 +32,6 @@ function LessonViewModel(lesson) {
 
 function QuestionViewModel(question) {
     this.description = knockout.computed(function() {
-        return question().description;
+        return knockout.unwrap(question).description;
     });
 }
