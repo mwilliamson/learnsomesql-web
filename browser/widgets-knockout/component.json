@@ -1,0 +1,7 @@
+{
+  "name": "widgets-knockout",
+  "scripts": ["index.js"],
+  "dependencies": {
+    "mwilliamson/component-knockout": "2.3.0"
+  }
+}
