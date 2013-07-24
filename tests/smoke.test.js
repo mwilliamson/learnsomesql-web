@@ -7,7 +7,11 @@
         questions: [
             {
                 description: "<p>Get the model of every car in the <code>cars</code> table.</p>",
-                correctAnswer: "SELECT model FROM cars"
+                correctAnswer: "SELECT model FROM cars",
+                expectedResults: {
+                    columnNames: ["model"],
+                    rows: [["Fabia"], ["Fox"]]
+                }
             },
             {
                 description: "<p>Use a single <code>SELECT</code> to get the license plate and color of every car in the <code>cars</code> table.</p>"
@@ -30,7 +34,21 @@
         
         var questionDescriptionElement = applicationElement.querySelector("p.question-description");
         strictEqual(questionDescriptionElement.textContent, "Get the model of every car in the cars table.");
+        var expectedResults = readTable(applicationElement.querySelector(".expected-results"));
+        deepEqual(expectedResults, [["model"], ["Fabia"], ["Fox"]]);
     });
+    
+    function readTable(element) {
+        return toList(element.querySelectorAll("tr")).map(function(row) {
+            return toList(row.querySelectorAll("th, td")).map(function(cell) {
+                return cell.textContent;
+            });
+        });
+    }
+    
+    function toList(listLike) {
+        return Array.prototype.slice.call(listLike, 0);
+    }
     
     test("query input is initially empty", function() {
         var applicationElement = renderSampleQuestion();

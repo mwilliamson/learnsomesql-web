@@ -1,7 +1,25 @@
 <div>
   <h3>Task</h3>
+  
   <p class="question-description" data-bind="html: description"></p>
   <button class="btn show-me-the-answer" data-bind="click: showMeTheAnswer">Show me the answer</button>
+  
+  <h4>What your results should look like</h4>
+  <table class="table table-bordered expected-results" data-bind="with: expectedResults">
+    <tr>
+      <!-- ko foreach: columnNames -->
+        <th data-bind="text: $data"></th>
+      <!-- /ko -->
+    </tr>
+    <!-- ko foreach: rows -->
+      <tr>
+        <!-- ko foreach: $data -->
+          <td data-bind="text: $data"></td>
+        <!-- /ko -->
+      </tr>
+    <!-- /ko -->
+  </table>
+  
 </div>
 
 <div>

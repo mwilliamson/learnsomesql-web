@@ -36,6 +36,10 @@ function QuestionViewModel(question) {
     this.description = knockout.computed(function() {
         return knockout.unwrap(question).description;
     });
+    this.expectedResults = knockout.computed(function() {
+        return knockout.unwrap(question).expectedResults;
+    });
+    
     this.query = knockout.observable("");
     this.showMeTheAnswer = function() {
         self.query(knockout.unwrap(question).correctAnswer);
