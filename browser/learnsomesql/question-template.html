@@ -5,20 +5,9 @@
   <button class="btn show-me-the-answer" data-bind="click: showMeTheAnswer">Show me the answer</button>
   
   <h4>What your results should look like</h4>
-  <table class="table table-bordered expected-results" data-bind="with: expectedResults">
-    <tr>
-      <!-- ko foreach: columnNames -->
-        <th data-bind="text: $data"></th>
-      <!-- /ko -->
-    </tr>
-    <!-- ko foreach: rows -->
-      <tr>
-        <!-- ko foreach: $data -->
-          <td data-bind="text: $data"></td>
-        <!-- /ko -->
-      </tr>
+  <div class="expected-results">
+    <!-- ko widget: "query-results", widgetOptions: {queryResults: expectedResults} -->
     <!-- /ko -->
-  </table>
   
 </div>
 

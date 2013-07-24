@@ -2,6 +2,16 @@ var knockout = require("knockout");
 var widgetsKnockout = require("widgets-knockout");
 var lessonTemplate = require("./lesson-template.html");
 var questionTemplate = require("./question-template.html");
+var queryResultsTemplate = require("./query-results.html");
+
+var queryResultsWidget = widgetsKnockout.widget({
+    init: function(options) {
+        return {
+            viewModel: options.queryResults,
+            template: queryResultsTemplate
+        };
+    }
+});
 
 var questionWidget = widgetsKnockout.widget({
     init: function(options) {
@@ -9,6 +19,9 @@ var questionWidget = widgetsKnockout.widget({
             viewModel: new QuestionViewModel(options.question),
             template: questionTemplate
         };
+    },
+    dependencies: {
+        "query-results": queryResultsWidget
     }
 });
 

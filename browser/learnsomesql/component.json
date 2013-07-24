@@ -1,7 +1,11 @@
 {
   "name": "learnsomesql",
   "scripts": ["index.js"],
-  "templates": ["lesson-template.html", "question-template.html"],
+  "templates": [
+    "lesson-template.html",
+    "question-template.html",
+    "query-results.html"
+  ],
   "dependencies": {
     "mwilliamson/component-knockout": "2.3.0",
     "widgets-knockout": "*"
