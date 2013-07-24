@@ -1,10 +1,11 @@
 <div>
   <h3>Task</h3>
   <p class="question-description" data-bind="html: description"></p>
+  <button class="btn show-me-the-answer" data-bind="click: showMeTheAnswer">Show me the answer</button>
 </div>
 
 <div>
   <h3>Query</h3>
   
-  <textarea class="query-input"></textarea>
+  <textarea class="query-input" data-bind="text: query"></textarea>
 </div>

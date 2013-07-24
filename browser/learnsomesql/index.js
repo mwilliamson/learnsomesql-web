@@ -31,7 +31,13 @@ function LessonViewModel(lesson) {
 }
 
 function QuestionViewModel(question) {
+    var self = this;
+    
     this.description = knockout.computed(function() {
         return knockout.unwrap(question).description;
     });
+    this.query = knockout.observable("");
+    this.showMeTheAnswer = function() {
+        self.query(knockout.unwrap(question).correctAnswer);
+    };
 }

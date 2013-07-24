@@ -6,7 +6,8 @@
         description: "<p>SELECTs are the simplest and most commonly used SQL statement.</p>",
         questions: [
             {
-                description: "<p>Get the model of every car in the <code>cars</code> table.</p>"
+                description: "<p>Get the model of every car in the <code>cars</code> table.</p>",
+                correctAnswer: "SELECT model FROM cars"
             },
             {
                 description: "<p>Use a single <code>SELECT</code> to get the license plate and color of every car in the <code>cars</code> table.</p>"
@@ -36,6 +37,14 @@
         
         var queryInput = applicationElement.querySelector(".query-input");
         strictEqual(queryInput.value, "");
+    });
+    
+    test("clicking show me the answer insert answer into query input", function() {
+        var applicationElement = renderSampleQuestion();
+        
+        applicationElement.querySelector(".show-me-the-answer").click();
+        var queryInput = applicationElement.querySelector(".query-input");
+        strictEqual(queryInput.value, "SELECT model FROM cars");
     });
 
     function renderSampleQuestion() {
