@@ -15,11 +15,7 @@
     };
 
     test("rendering lesson adds title and description to element", function() {
-        var applicationElement = createEmptyDiv();
-        learnsomesql.renderLesson({
-            lesson: sampleLesson,
-            element: applicationElement
-        });
+        var applicationElement = renderSampleQuestion();
         
         var lessonTitleElement = applicationElement.querySelector("h2");
         strictEqual(lessonTitleElement.textContent, "Simple SELECTS");
@@ -29,17 +25,27 @@
     });
     
     test("first question is rendered by default", function() {
+        var applicationElement = renderSampleQuestion();
+        
+        var questionDescriptionElement = applicationElement.querySelector("p.question-description");
+        strictEqual(questionDescriptionElement.textContent, "Get the model of every car in the cars table.");
+    });
+    
+    test("query input is initially empty", function() {
+        var applicationElement = renderSampleQuestion();
+        
+        var queryInput = applicationElement.querySelector(".query-input");
+        strictEqual(queryInput.value, "");
+    });
+
+    function renderSampleQuestion() {
         var applicationElement = createEmptyDiv();
         learnsomesql.renderLesson({
             lesson: sampleLesson,
             element: applicationElement
         });
-        
-        var questionDescriptionElement = applicationElement.querySelector("p.question-description");
-        strictEqual(questionDescriptionElement.textContent, "Get the model of every car in the cars table.");
-    });
-
-
+        return applicationElement;
+    }
 
     function createEmptyDiv() {
         var div = document.createElement("div");
