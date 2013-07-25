@@ -65,13 +65,48 @@
         strictEqual(queryInput.value, "SELECT model FROM cars");
     });
 
-    function renderSampleQuestion() {
+    test("submitting query displays results", function() {
+        var queryExecutor = createQueryExecutor({
+            "SELECT model FROM cars": {
+                columnNames: ["model"],
+                rows: [["Fabia"], ["Fox"]]
+            }
+        });
+        var applicationElement = renderSampleQuestion(queryExecutor);
+
+        var queryInput = applicationElement.querySelector(".query-input");
+        queryInput.value = "SELECT model FROM cars";
+        fireEvent(queryInput, "change");        
+
+        applicationElement.querySelector(".submit-query").click();
+
+        var resultTable = applicationElement.querySelector(".result table");
+        deepEqual(
+            readTable(resultTable),
+            [["model"], ["Fabia"], ["Fox"]]
+        );
+    });
+
+    function fireEvent(element, eventName) {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent(eventName, false, true);
+            element.dispatchEvent(evt);
+    }
+
+    function renderSampleQuestion(queryExecutor) {
         var applicationElement = createEmptyDiv();
-        learnsomesql.renderLesson({
+        learnsomesql.createLessonWidget(queryExecutor)({
             lesson: sampleLesson,
+            queryExecutor: queryExecutor,
             element: applicationElement
         });
         return applicationElement;
+    }
+
+    function createQueryExecutor(results) {
+        return function(query, callback) {
+            callback(results[query]);
+        };
     }
 
     function createEmptyDiv() {

@@ -1,14 +1,16 @@
-<table class="table table-bordered">
-  <tr>
-    <!-- ko foreach: columnNames -->
-      <th data-bind="text: $data"></th>
-    <!-- /ko -->
-  </tr>
-  <!-- ko foreach: rows -->
+<!-- ko if: $data -->
+  <table class="table table-bordered">
     <tr>
-      <!-- ko foreach: $data -->
-        <td data-bind="text: $data"></td>
+      <!-- ko foreach: columnNames -->
+        <th data-bind="text: $data"></th>
       <!-- /ko -->
     </tr>
-  <!-- /ko -->
-</table>
+    <!-- ko foreach: rows -->
+      <tr>
+        <!-- ko foreach: $data -->
+          <td data-bind="text: $data"></td>
+        <!-- /ko -->
+      </tr>
+    <!-- /ko -->
+  </table>
+<!-- /ko -->

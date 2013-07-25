@@ -14,5 +14,14 @@
 <div>
   <h3>Query</h3>
   
-  <textarea class="query-input" data-bind="text: query"></textarea>
+  <textarea class="query-input" data-bind="value: query"></textarea>
+
+  <button class="btn btn-primary submit-query" data-bind="click: submitQuery">Run it</button>
+</div>
+
+<div class="result">
+  <h3>Result</h3>
+  
+  <!-- ko widget: "query-results", widgetOptions: {queryResults: submittedQueryResults} -->
+  <!-- /ko -->
 </div>
