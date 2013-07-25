@@ -8,7 +8,7 @@ build: node_modules/.bin/component components
 	$(COMPONENT_BIN) build -o _build -n learnsomesql
 
 test: build
-	tests/run-tests.sh
+	npm test
 
 node_modules/.bin/component: package.json
 	npm install
