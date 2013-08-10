@@ -17,7 +17,7 @@ var questionWidget = function(queryExecutor) {
     return widgetsKnockout.widget({
         init: function(options) {
             return {
-                viewModel: new QuestionViewModel(queryExecutor, options.question, options.nextQuestion),
+                viewModel: new QuestionViewModel(queryExecutor, options.questions),
                 template: questionTemplate
             };
         },
@@ -44,20 +44,25 @@ function lessonWidget(queryExecutor) {
 exports.createLessonWidget = lessonWidget;
 
 function LessonViewModel(lesson) {
-    var self = this;
-    var questionIndex = knockout.observable(0);
     this.title = lesson.title;
     this.description = lesson.description;
-    this.question = knockout.computed(function() {
-        return lesson.questions[questionIndex()];
+    this.questions = lesson.questions;
+}
+
+function QuestionViewModel(queryExecutor, questions) {
+    var self = this;
+    var questionIndex = knockout.observable(0);
+    
+    var question = knockout.computed(function() {
+        return questions[questionIndex()];
     });
     this.nextQuestion = function() {
         questionIndex(questionIndex() + 1);
-    }
-}
-
-function QuestionViewModel(queryExecutor, question, nextQuestion) {
-    var self = this;
+    };
+    this.isLastQuestion = knockout.computed(function() {
+        return questionIndex() + 1 >= questions.length;
+    });
+    
 
     this.description = knockout.computed(function() {
         return knockout.unwrap(question).description;
@@ -79,6 +84,4 @@ function QuestionViewModel(queryExecutor, question, nextQuestion) {
             self.submittedQueryResults(results);
         });
     };
-    
-    this.nextQuestion = nextQuestion;
 }

@@ -14,8 +14,12 @@
                 }
             },
             {
-                description: "<p>Get the license plate and color of every car.</p>",
-                correctAnswer: "SELECT licensePlate, color FROM cars"
+                description: "<p>Get the color of every car.</p>",
+                correctAnswer: "SELECT color FROM cars",
+                expectedResults: {
+                    columnNames: ["color"],
+                    rows: [["Green"], ["Red"]]
+                }
             }
         ]
     };
@@ -102,9 +106,33 @@
         var applicationElement = renderSampleQuestion(queryExecutor);
         submitQuery(applicationElement, "SELECT model FROM cars");
 
-        applicationElement.querySelector(".result .next-question").click();
+        clickNextQuestion(applicationElement);
         var questionDescriptionElement = applicationElement.querySelector("p.question-description").textContent;
-        strictEqual(questionDescriptionElement, "Get the license plate and color of every car.");
+        strictEqual(questionDescriptionElement, "Get the color of every car.");
+    });
+
+    test("cannot go to next question if on last question", function() {
+        var queryExecutor = createQueryExecutor({
+            "SELECT model FROM cars": {
+                query: "SELECT model FROM cars",
+                table: {
+                    columnNames: ["model"],
+                    rows: [["Fabia"], ["Fox"]]
+                }
+            },
+            "SELECT color FROM cars": {
+                query: "SELECT color FROM cars",
+                table: {
+                    columnNames: ["color"],
+                    rows: [["Green"], ["Red"]]
+                }
+            }
+        });
+        var applicationElement = renderSampleQuestion(queryExecutor);
+        submitQuery(applicationElement, "SELECT model FROM cars");
+        clickNextQuestion(applicationElement);
+        submitQuery(applicationElement, "SELECT color FROM cars");
+        strictEqual(null, findNextQuestionButton(applicationElement));
     });
     
     function submitQuery(applicationElement, query) {
@@ -113,6 +141,14 @@
         fireEvent(queryInput, "change");        
 
         applicationElement.querySelector(".submit-query").click();
+    }
+    
+    function clickNextQuestion(applicationElement) {
+        findNextQuestionButton(applicationElement).click();
+    }
+    
+    function findNextQuestionButton(applicationElement) {
+        return applicationElement.querySelector(".result .next-question");
     }
 
     function fireEvent(element, eventName) {
