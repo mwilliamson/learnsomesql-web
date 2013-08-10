@@ -68,6 +68,7 @@
     test("submitting query displays results", function() {
         var queryExecutor = createQueryExecutor({
             "SELECT model FROM cars": {
+                query: "SELECT model FROM cars",
                 table: {
                     columnNames: ["model"],
                     rows: [["Fabia"], ["Fox"]]
@@ -81,6 +82,9 @@
         fireEvent(queryInput, "change");        
 
         applicationElement.querySelector(".submit-query").click();
+
+        var renderedOriginalQuery = applicationElement.querySelector(".result .query").textContent;
+        strictEqual(renderedOriginalQuery, "SELECT model FROM cars");
 
         var resultTable = applicationElement.querySelector(".result table");
         deepEqual(
