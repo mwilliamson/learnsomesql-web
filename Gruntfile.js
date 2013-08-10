@@ -13,7 +13,8 @@ module.exports = function(grunt) {
         qunit: {
             files: ["test.html"],
             options: {
-                urls: ["http://localhost:54321"]
+                urls: ["http://localhost:54321"],
+                timeout: 10000
             }
         }
     });
