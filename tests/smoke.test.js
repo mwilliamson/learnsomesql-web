@@ -14,7 +14,8 @@
                 }
             },
             {
-                description: "<p>Use a single <code>SELECT</code> to get the license plate and color of every car in the <code>cars</code> table.</p>"
+                description: "<p>Get the license plate and color of every car.</p>",
+                correctAnswer: "SELECT licensePlate, color FROM cars"
             }
         ]
     };
@@ -86,6 +87,24 @@
             readTable(resultTable),
             [["model"], ["Fabia"], ["Fox"]]
         );
+    });
+
+    test("can go to next question if answer is correct", function() {
+        var queryExecutor = createQueryExecutor({
+            "SELECT model FROM cars": {
+                query: "SELECT model FROM cars",
+                table: {
+                    columnNames: ["model"],
+                    rows: [["Fabia"], ["Fox"]]
+                }
+            }
+        });
+        var applicationElement = renderSampleQuestion(queryExecutor);
+        submitQuery(applicationElement, "SELECT model FROM cars");
+
+        applicationElement.querySelector(".result .next-question").click();
+        var questionDescriptionElement = applicationElement.querySelector("p.question-description").textContent;
+        strictEqual(questionDescriptionElement, "Get the license plate and color of every car.");
     });
     
     function submitQuery(applicationElement, query) {
