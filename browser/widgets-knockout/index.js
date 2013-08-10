@@ -47,9 +47,23 @@ function widget(widgetOptions) {
         var temporaryElement = document.createElement("div");
         temporaryElement.innerHTML = template;
         var nodes = Array.prototype.slice.call(temporaryElement.childNodes, 0);
-        knockout.virtualElements.setDomNodeChildren(element, nodes);
-
-        knockout.applyBindingsToDescendants(viewModel, element);
+        if (widgetOptions.replaceElement) {
+            var parentNode = element.parentNode;
+            var newNodes = [];
+            while (temporaryElement.hasChildNodes()) {
+                var newNode = temporaryElement.firstChild;
+                newNodes.push(newNode);
+                parentNode.insertBefore(newNode, element);
+            }
+            parentNode.removeChild(element);
+            for (var i = 0; i < newNodes.length; i++) {
+                knockout.applyBindings(viewModel, newNodes[i]);
+            }
+        } else {
+            knockout.virtualElements.setDomNodeChildren(element, nodes);
+            knockout.applyBindingsToDescendants(viewModel, element);
+        }
+        
     };
 }
 

@@ -66,6 +66,42 @@
         strictEqual(element.textContent, 'Hello BOB');
     });
 
+
+    test("example", function() {
+        var applicationElement = createEmptyDiv();
+
+        var shoutingWidget = widgetsKnockout.widget({
+            init: function(options) {
+                var message = "message" in options ? options.message : element.textContent;
+                var contents = message.toUpperCase();
+                return {
+                    viewModel: {contents: contents},
+                    template: '<strong data-bind="text: contents"></strong>'
+                }
+            },
+            replaceElement: true
+        });
+
+        var emphaticGreeterWidget = widgetsKnockout.widget({
+            init: function(options) {
+                var name = "name" in options ? options.name : element.textContent;
+            
+                return {
+                    viewModel: {name: options.element.textContent},
+                    template: 'Hello <span data-bind="widget: \'shout\', widgetOptions: {message: name}"></span>!'
+                }
+            },
+            dependencies: {
+                shout: shoutingWidget
+            }
+        });
+
+        var element = createEmptyDiv();
+        element.textContent = "Bob";
+        emphaticGreeterWidget({element: element});
+        strictEqual(element.innerHTML, 'Hello <strong>BOB</strong>!');
+    });
+
     function createEmptyDiv() {
         var div = document.createElement("div");
         var fixture = document.getElementById("qunit-fixture");
