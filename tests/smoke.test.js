@@ -68,8 +68,10 @@
     test("submitting query displays results", function() {
         var queryExecutor = createQueryExecutor({
             "SELECT model FROM cars": {
-                columnNames: ["model"],
-                rows: [["Fabia"], ["Fox"]]
+                table: {
+                    columnNames: ["model"],
+                    rows: [["Fabia"], ["Fox"]]
+                }
             }
         });
         var applicationElement = renderSampleQuestion(queryExecutor);

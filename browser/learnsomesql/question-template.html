@@ -21,7 +21,8 @@
 
 <div class="result">
   <h3>Result</h3>
-  
-  <!-- ko widget: "query-results", widgetOptions: {queryResults: submittedQueryResults} -->
+  <!-- ko with: submittedQueryResults -->
+    <!-- ko widget: "query-results", widgetOptions: {queryResults: table} -->
+    <!-- /ko -->
   <!-- /ko -->
 </div>
