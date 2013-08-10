@@ -76,12 +76,7 @@
             }
         });
         var applicationElement = renderSampleQuestion(queryExecutor);
-
-        var queryInput = applicationElement.querySelector(".query-input");
-        queryInput.value = "SELECT model FROM cars";
-        fireEvent(queryInput, "change");        
-
-        applicationElement.querySelector(".submit-query").click();
+        submitQuery(applicationElement, "SELECT model FROM cars");
 
         var renderedOriginalQuery = applicationElement.querySelector(".result .query").textContent;
         strictEqual(renderedOriginalQuery, "SELECT model FROM cars");
@@ -92,6 +87,14 @@
             [["model"], ["Fabia"], ["Fox"]]
         );
     });
+    
+    function submitQuery(applicationElement, query) {
+        var queryInput = applicationElement.querySelector(".query-input");
+        queryInput.value = query;
+        fireEvent(queryInput, "change");        
+
+        applicationElement.querySelector(".submit-query").click();
+    }
 
     function fireEvent(element, eventName) {
             var evt = document.createEvent("HTMLEvents");
