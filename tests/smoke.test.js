@@ -25,49 +25,31 @@
     };
 
     test("rendering lesson adds title and description to element", function() {
-        var applicationElement = renderSampleQuestion();
+        var application = renderSampleQuestion();
         
-        var lessonTitleElement = applicationElement.querySelector("h2");
-        strictEqual(lessonTitleElement.textContent, "Simple SELECTS");
-        
-        var descriptionElement = applicationElement.querySelector("p.lesson-description");
-        strictEqual(descriptionElement.textContent, "SELECTs are the simplest and most commonly used SQL statement.");
+        var lesson = application.lesson();
+        strictEqual(lesson.title, "Simple SELECTS");
+        strictEqual(lesson.description, "SELECTs are the simplest and most commonly used SQL statement.");
     });
     
     test("first question is rendered by default", function() {
-        var applicationElement = renderSampleQuestion();
+        var application = renderSampleQuestion();
         
-        var questionDescriptionElement = applicationElement.querySelector("p.question-description");
-        strictEqual(questionDescriptionElement.textContent, "Get the model of every car in the cars table.");
-        var expectedResults = readTable(applicationElement.querySelector(".expected-results"));
-        deepEqual(expectedResults, [["model"], ["Fabia"], ["Fox"]]);
+        strictEqual(application.questionDescription(), "Get the model of every car in the cars table.");
+        deepEqual(application.expectedResults(), [["model"], ["Fabia"], ["Fox"]]);
     });
     
-    function readTable(element) {
-        return toList(element.querySelectorAll("tr")).map(function(row) {
-            return toList(row.querySelectorAll("th, td")).map(function(cell) {
-                return cell.textContent;
-            });
-        });
-    }
-    
-    function toList(listLike) {
-        return Array.prototype.slice.call(listLike, 0);
-    }
-    
     test("query input is initially empty", function() {
-        var applicationElement = renderSampleQuestion();
+        var application = renderSampleQuestion();
         
-        var queryInput = applicationElement.querySelector(".query-input");
-        strictEqual(queryInput.value, "");
+        strictEqual(application.currentQuery(), "");
     });
     
     test("clicking show me the answer insert answer into query input", function() {
-        var applicationElement = renderSampleQuestion();
+        var application = renderSampleQuestion();
         
-        applicationElement.querySelector(".show-me-the-answer").click();
-        var queryInput = applicationElement.querySelector(".query-input");
-        strictEqual(queryInput.value, "SELECT model FROM cars");
+        application.showMeTheAnswer();
+        strictEqual(application.currentQuery(), "SELECT model FROM cars");
     });
 
     test("submitting query displays results", function() {
@@ -80,15 +62,13 @@
                 }
             }
         });
-        var applicationElement = renderSampleQuestion(queryExecutor);
-        submitQuery(applicationElement, "SELECT model FROM cars");
+        var application = renderSampleQuestion(queryExecutor);
+        application.submitQuery("SELECT model FROM cars");
 
-        var renderedOriginalQuery = applicationElement.querySelector(".result .query").textContent;
-        strictEqual(renderedOriginalQuery, "SELECT model FROM cars");
+        strictEqual(application.executedQuery(), "SELECT model FROM cars");
 
-        var resultTable = applicationElement.querySelector(".result table");
         deepEqual(
-            readTable(resultTable),
+            application.resultTable(),
             [["model"], ["Fabia"], ["Fox"]]
         );
     });
@@ -103,12 +83,11 @@
                 }
             }
         });
-        var applicationElement = renderSampleQuestion(queryExecutor);
-        submitQuery(applicationElement, "SELECT model FROM cars");
+        var application = renderSampleQuestion(queryExecutor);
+        application.submitQuery("SELECT model FROM cars");
 
-        clickNextQuestion(applicationElement);
-        var questionDescriptionElement = applicationElement.querySelector("p.question-description").textContent;
-        strictEqual(questionDescriptionElement, "Get the color of every car.");
+        application.clickNextQuestion();
+        strictEqual(application.questionDescription(), "Get the color of every car.");
     });
 
     test("cannot go to next question if on last question", function() {
@@ -128,33 +107,29 @@
                 }
             }
         });
-        var applicationElement = renderSampleQuestion(queryExecutor);
-        submitQuery(applicationElement, "SELECT model FROM cars");
-        clickNextQuestion(applicationElement);
-        submitQuery(applicationElement, "SELECT color FROM cars");
-        strictEqual(null, findNextQuestionButton(applicationElement));
+        var application = renderSampleQuestion(queryExecutor);
+        application.submitQuery("SELECT model FROM cars");
+        application.clickNextQuestion();
+        application.submitQuery("SELECT color FROM cars");
+        strictEqual(null, application.findNextQuestionButton());
     });
     
-    function submitQuery(applicationElement, query) {
-        var queryInput = applicationElement.querySelector(".query-input");
-        queryInput.value = query;
-        fireEvent(queryInput, "change");        
-
-        applicationElement.querySelector(".submit-query").click();
+    function readTable(element) {
+        return toList(element.querySelectorAll("tr")).map(function(row) {
+            return toList(row.querySelectorAll("th, td")).map(function(cell) {
+                return cell.textContent;
+            });
+        });
     }
     
-    function clickNextQuestion(applicationElement) {
-        findNextQuestionButton(applicationElement).click();
-    }
-    
-    function findNextQuestionButton(applicationElement) {
-        return applicationElement.querySelector(".result .next-question");
+    function toList(listLike) {
+        return Array.prototype.slice.call(listLike, 0);
     }
 
     function fireEvent(element, eventName) {
-            var evt = document.createEvent("HTMLEvents");
-            evt.initEvent(eventName, false, true);
-            element.dispatchEvent(evt);
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent(eventName, false, true);
+        element.dispatchEvent(evt);
     }
 
     function renderSampleQuestion(queryExecutor) {
@@ -164,8 +139,63 @@
             queryExecutor: queryExecutor,
             element: applicationElement
         });
-        return applicationElement;
+        return new Application(applicationElement);
     }
+    
+    function Application(element) {
+        this.element = element;
+    }
+    
+    Application.prototype.lesson = function() {
+        var title = this.element.querySelector("h2").textContent;
+        var description = this.element.querySelector("p.lesson-description").textContent;
+        return {title: title, description: description};
+    };
+    
+    Application.prototype.queryInput = function() {
+        return this.element.querySelector(".query-input");
+    };
+    
+    Application.prototype.currentQuery = function() {
+        return this.queryInput().value;
+    };
+    
+    Application.prototype.submitQuery = function(query) {
+        var queryInput = this.queryInput();
+        queryInput.value = query;
+        fireEvent(queryInput, "change");        
+
+        this.element.querySelector(".submit-query").click();
+    };
+    
+    Application.prototype.clickNextQuestion = function() {
+        this.findNextQuestionButton().click();
+    };
+    
+    Application.prototype.findNextQuestionButton = function() {
+        return this.element.querySelector(".result .next-question");
+    };
+    
+    Application.prototype.questionDescription = function() {
+        return this.element.querySelector("p.question-description").textContent;
+    };
+    
+    Application.prototype.expectedResults = function() {
+        return readTable(this.element.querySelector(".expected-results"));
+    };
+    
+    Application.prototype.showMeTheAnswer = function() {
+        this.element.querySelector(".show-me-the-answer").click();
+    };
+    
+    Application.prototype.executedQuery = function() {
+        return this.element.querySelector(".result .query").textContent;
+    };
+    
+    Application.prototype.resultTable = function() {
+        var resultTable = this.element.querySelector(".result table");
+        return readTable(resultTable);
+    };
 
     function createQueryExecutor(results) {
         return function(query, callback) {
