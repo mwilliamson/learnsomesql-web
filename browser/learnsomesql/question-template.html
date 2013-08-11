@@ -42,6 +42,9 @@
       <!-- ko if: $parent.isLastQuestion -->
         <!-- ko with: $parent.nextLesson -->
           <p>
+            Congratulations! You've completed all of the tasks in this lesson.
+          </p>
+          <p>
             <a class="btn btn-success next-lesson" data-bind="attr: {href: url}">Next lesson: <span data-bind="text: title"></span></a>
           </p>
         <!-- /ko -->
