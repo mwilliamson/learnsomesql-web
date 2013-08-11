@@ -1,4 +1,4 @@
-<div>
+<div class="span4">
   <h3>Task</h3>
   
   <p class="question-description" data-bind="html: description"></p>
@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div>
+<div class="span4">
   <h3>Query</h3>
   
   <textarea class="query-input" data-bind="value: query"></textarea>
@@ -19,7 +19,7 @@
   <button class="btn btn-primary submit-query" data-bind="click: submitQuery">Run it</button>
 </div>
 
-<div class="result">
+<div class="span4 result">
   <h3>Result</h3>
   <!-- ko with: submittedQueryResults -->
     <!-- ko if: $data.error -->
