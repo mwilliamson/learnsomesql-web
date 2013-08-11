@@ -45,6 +45,15 @@
             <a class="btn btn-success next-lesson" data-bind="attr: {href: url}, text: title"></a>
           </p>
         <!-- /ko -->
+        
+        <!-- ko ifnot: $parent.nextLesson -->
+          <p>
+            This is the last lesson &ndash; so far! If have any feedback or
+            suggestions, or would just like to know when there are any more
+            lessons, send us an email at <a href="mailto:hello@learnsomesql.com">hello@learnsomesql.com</a>.
+          </p>
+        <!-- /ko -->
+        
       <!-- /ko -->
       
     <!-- /ko -->
