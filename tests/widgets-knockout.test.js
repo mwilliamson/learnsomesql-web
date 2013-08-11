@@ -14,7 +14,7 @@
 
         var element = createEmptyDiv();
         widget({element: element, name: "Bob"});
-        strictEqual(element.innerHTML, 'Hello <span data-bind="text: name">Bob</span>');
+        strictEqual(stripComments(element.innerHTML), 'Hello <span data-bind="text: name">Bob</span>');
     });
 
     test("dependencies of widget are renderable using widget binding", function() {
@@ -38,9 +38,12 @@
 
         var element = createEmptyDiv();
         widget({element: element, name: "Bob"});
-        strictEqual(element.innerHTML, 'Hello <span data-bind="widget: \'shout\', widgetOptions: {name: name}">BOB</span>');
+        strictEqual(stripComments(element.innerHTML), 'Hello <span data-bind="widget: \'shout\', widgetOptions: {name: name}">BOB</span>');
     });
-
+    
+    function stripComments(html) {
+        return html.replace(/<!--.+?-->/g, "");
+    }
 
     test("dependencies of widget are renderable using widget binding within child binding context", function() {
         var applicationElement = createEmptyDiv();

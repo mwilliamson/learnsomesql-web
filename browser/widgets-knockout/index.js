@@ -21,26 +21,32 @@ knockout.bindingHandlers.widget = {
     }
 };
 
+knockout.bindingHandlers.__widgetBind = {
+    init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var widgets = knockout.utils.domData.get(element, "__widgets");
+        var innerBindingContext = bindingContext.extend({__widgets: widgets});
+        knockout.applyBindingsToDescendants(innerBindingContext, element);
+        return { controlsDescendantBindings: true };
+    }
+}
+
 function findWidgets(bindingContext) {
-    if (bindingContext.$data.__widgets) {
-        return bindingContext.$data.__widgets;
-    }
-    for (var i = 0; i < bindingContext.$parents.length; i++) {
-        if (bindingContext.$parents[i].__widgets) {
-            return bindingContext.$parents[i].__widgets;
+    while (bindingContext) {
+        if ("__widgets" in bindingContext) {
+            return bindingContext.__widgets;
         }
+        bindingContext = bindingContext.$parentContext;
     }
-    return {};
+    throw new Error("Could not find widgets");
 }
 
 knockout.virtualElements.allowedBindings.widget = true;
+knockout.virtualElements.allowedBindings.__widgetBind = true;
 
 function widget(widgetOptions) {
     return function(instanceOptions) {
         var result = widgetOptions.init(instanceOptions);
-        var viewModel = result.viewModel;
-        viewModel.__widgets = widgetOptions.dependencies;
-        var template = result.template;
+        var template = "<!-- ko __widgetBind: $data -->" + result.template + "<!-- /ko -->";
         
         var element = instanceOptions.element;
 
@@ -49,7 +55,9 @@ function widget(widgetOptions) {
         var nodes = Array.prototype.slice.call(temporaryElement.childNodes, 0);
         knockout.virtualElements.setDomNodeChildren(element, nodes);
 
-        knockout.applyBindingsToDescendants(viewModel, element);
+        knockout.utils.domData.set(knockout.virtualElements.firstChild(element), "__widgets", widgetOptions.dependencies);
+
+        knockout.applyBindingsToDescendants(result.viewModel, element);
     };
 }
 
