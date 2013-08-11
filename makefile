@@ -7,6 +7,9 @@ COMPONENT_BIN = node_modules/.bin/component
 build: node_modules/.bin/component components
 	$(COMPONENT_BIN) build -o _build -n learnsomesql
 
+build-standalone: node_modules/.bin/component components
+	$(COMPONENT_BIN) build -o _build -n learnsomesql-standalone --standalone LearnSomeSql
+
 test: build
 	npm test
 
