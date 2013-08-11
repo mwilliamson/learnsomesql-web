@@ -111,7 +111,23 @@
         application.submitQuery("SELECT model FROM cars");
         application.clickNextQuestion();
         application.submitQuery("SELECT color FROM cars");
-        strictEqual(null, application.findNextQuestionButton());
+        strictEqual(application.findNextQuestionButton(), null);
+    });
+
+    test("cannot go to next question if answer is incorrect", function() {
+        var queryExecutor = createQueryExecutor({
+            "SELECT 1 as model": {
+                query: "SELECT model FROM cars",
+                table: {
+                    columnNames: ["model"],
+                    rows: [["1"]]
+                }
+            }
+        });
+        var application = renderSampleQuestion(queryExecutor);
+        application.submitQuery("SELECT 1 as model");
+
+        strictEqual(application.findNextQuestionButton(), null);
     });
     
     function readTable(element) {

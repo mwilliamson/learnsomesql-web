@@ -1,4 +1,5 @@
 var knockout = require("knockout");
+var deepEquals = require("equals");
 var widgetsKnockout = require("widgets-knockout");
 var lessonTemplate = require("./lesson-template.html");
 var questionTemplate = require("./question-template.html");
@@ -81,6 +82,7 @@ function QuestionViewModel(queryExecutor, questions) {
     this.submitQuery = function() {
         var query = self.query();
         queryExecutor(query, function(results) {
+            results.isCorrectAnswer = deepEquals(results.table, self.expectedResults());
             self.submittedQueryResults(results);
         });
     };

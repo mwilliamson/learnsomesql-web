@@ -27,10 +27,15 @@
     <!-- ko widget: "query-results", widgetOptions: {queryResults: table} -->
     <!-- /ko -->
     
-    <!-- ko ifnot: $parent.isLastQuestion -->
+    <!-- ko if: isCorrectAnswer -->
       <p>
-        <button class="btn btn-success next-question" data-bind="click: $parent.nextQuestion">Give me another</button>
+        Correct answer. Bonza!
       </p>
+      <!-- ko ifnot: $parent.isLastQuestion -->
+        <p>
+          <button class="btn btn-success next-question" data-bind="click: $parent.nextQuestion">Give me another</button>
+        </p>
+      <!-- /ko -->    
     <!-- /ko -->
   <!-- /ko -->
 </div>

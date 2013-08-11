@@ -8,6 +8,7 @@
   ],
   "dependencies": {
     "mwilliamson/component-knockout": "2.3.0",
+    "jkroso/equals": "0.3.1",
     "widgets-knockout": "*"
   }
 }
