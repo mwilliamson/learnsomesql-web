@@ -28,14 +28,16 @@
     <!-- /ko -->
     
     <!-- ko if: isCorrectAnswer -->
-      <p>
-        Correct answer. Bonza!
-      </p>
+      <p>Correct answer. Bonza!</p>
       <!-- ko ifnot: $parent.isLastQuestion -->
         <p>
           <button class="btn btn-success next-question" data-bind="click: $parent.nextQuestion">Give me another</button>
         </p>
       <!-- /ko -->    
+    <!-- /ko -->
+    
+    <!-- ko ifnot: isCorrectAnswer -->
+      <p>Wrong answer. Have another a go.</p>
     <!-- /ko -->
   <!-- /ko -->
 </div>

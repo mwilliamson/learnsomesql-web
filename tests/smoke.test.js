@@ -128,6 +128,7 @@
         application.submitQuery("SELECT 1 as model");
 
         strictEqual(application.findNextQuestionButton(), null);
+        strictEqual("Wrong answer. Have another a go.", application.resultMessage());
     });
     
     function readTable(element) {
@@ -211,6 +212,10 @@
     Application.prototype.resultTable = function() {
         var resultTable = this.element.querySelector(".result table");
         return readTable(resultTable);
+    };
+    
+    Application.prototype.resultMessage = function() {
+        return this.element.querySelector(".result p").textContent;
     };
 
     function createQueryExecutor(results) {
