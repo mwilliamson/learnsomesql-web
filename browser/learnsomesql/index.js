@@ -43,6 +43,7 @@ function lessonWidget(queryExecutor) {
 }
 
 exports.createLessonWidget = lessonWidget;
+exports.createQuestionWidget = questionWidget;
 
 function LessonViewModel(lesson, nextLesson) {
     this.title = lesson.title;
