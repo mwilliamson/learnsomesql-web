@@ -90,6 +90,15 @@
         strictEqual(application.resultMessage(), "Wrong answer. Have another a go.");
     });
 
+    test("cannot go to next lesson if on last question and last lesson", function() {
+        var application = renderSampleQuestion({isLastLesson: true});
+        application.submitQuery("SELECT model FROM cars");
+        application.clickNextQuestion();
+        application.submitQuery("SELECT color FROM cars");
+        strictEqual(application.findNextQuestionButton(), null);
+        strictEqual(application.findNextLessonButton(), null);
+    });
+
     test("query errors are rendered in results", function() {
         var application = renderSampleQuestion();
         application.submitQuery("SELECTEROO");
