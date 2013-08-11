@@ -37,7 +37,16 @@
         <p>
           <button class="btn btn-success next-question" data-bind="click: $parent.nextQuestion">Give me another</button>
         </p>
-      <!-- /ko -->    
+      <!-- /ko -->
+      
+      <!-- ko if: $parent.isLastQuestion -->
+        <!-- ko with: $parent.nextLesson -->
+          <p>
+            <a class="btn btn-success next-lesson" data-bind="attr: {href: url}, text: title"></a>
+          </p>
+        <!-- /ko -->
+      <!-- /ko -->
+      
     <!-- /ko -->
     
     <!-- ko ifnot: isCorrectAnswer -->

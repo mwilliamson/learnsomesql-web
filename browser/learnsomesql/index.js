@@ -18,7 +18,7 @@ var questionWidget = function(queryExecutor) {
     return widgetsKnockout.widget({
         init: function(options) {
             return {
-                viewModel: new QuestionViewModel(queryExecutor, options.questions),
+                viewModel: new QuestionViewModel(queryExecutor, options.questions, options.nextLesson),
                 template: questionTemplate
             };
         },
@@ -32,7 +32,7 @@ function lessonWidget(queryExecutor) {
     return widgetsKnockout.widget({
         init: function(options) {
             return {
-                viewModel: new LessonViewModel(options.lesson),
+                viewModel: new LessonViewModel(options.lesson, options.nextLesson),
                 template: lessonTemplate
             };
         },
@@ -44,14 +44,16 @@ function lessonWidget(queryExecutor) {
 
 exports.createLessonWidget = lessonWidget;
 
-function LessonViewModel(lesson) {
+function LessonViewModel(lesson, nextLesson) {
     this.title = lesson.title;
     this.description = lesson.description;
     this.questions = lesson.questions;
+    this.nextLesson = nextLesson;
 }
 
-function QuestionViewModel(queryExecutor, questions) {
+function QuestionViewModel(queryExecutor, questions, nextLesson) {
     var self = this;
+    this.nextLesson = nextLesson;
     var questionIndex = knockout.observable(0);
     
     var question = knockout.computed(function() {

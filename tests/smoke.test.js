@@ -78,6 +78,8 @@
         application.clickNextQuestion();
         application.submitQuery("SELECT color FROM cars");
         strictEqual(application.findNextQuestionButton(), null);
+        strictEqual(application.findNextLessonButton().getAttribute("href"), "/lesson/select-star");
+        strictEqual(application.findNextLessonButton().textContent, "SELECT *");
     });
 
     test("cannot go to next question if answer is incorrect", function() {
@@ -112,7 +114,9 @@
         element.dispatchEvent(evt);
     }
 
-    function renderSampleQuestion() {
+    function renderSampleQuestion(options) {
+        options = options || {};
+        
         var queryExecutor = createQueryExecutor({
             "SELECT 1 as model": {
                 query: "SELECT model FROM cars",
@@ -142,9 +146,13 @@
         });
         
         var applicationElement = createEmptyDiv();
+        var nextLesson = options.isLastLesson ? null : {
+            url: "/lesson/select-star",
+            title: "SELECT *"
+        };
         learnsomesql.createLessonWidget(queryExecutor)({
             lesson: sampleLesson,
-            queryExecutor: queryExecutor,
+            nextLesson: nextLesson,
             element: applicationElement
         });
         return new Application(applicationElement);
@@ -211,6 +219,10 @@
     
     Application.prototype.resultError = function() {
         return this.element.querySelector(".result .error").textContent;
+    };
+    
+    Application.prototype.findNextLessonButton = function() {
+        return this.element.querySelector(".result .next-lesson");
     };
 
     function createQueryExecutor(results) {
