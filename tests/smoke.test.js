@@ -53,16 +53,7 @@
     });
 
     test("submitting query displays results", function() {
-        var queryExecutor = createQueryExecutor({
-            "SELECT model FROM cars": {
-                query: "SELECT model FROM cars",
-                table: {
-                    columnNames: ["model"],
-                    rows: [["Fabia"], ["Fox"]]
-                }
-            }
-        });
-        var application = renderSampleQuestion(queryExecutor);
+        var application = renderSampleQuestion();
         application.submitQuery("SELECT model FROM cars");
 
         strictEqual(application.executedQuery(), "SELECT model FROM cars");
@@ -74,16 +65,7 @@
     });
 
     test("can go to next question if answer is correct", function() {
-        var queryExecutor = createQueryExecutor({
-            "SELECT model FROM cars": {
-                query: "SELECT model FROM cars",
-                table: {
-                    columnNames: ["model"],
-                    rows: [["Fabia"], ["Fox"]]
-                }
-            }
-        });
-        var application = renderSampleQuestion(queryExecutor);
+        var application = renderSampleQuestion();
         application.submitQuery("SELECT model FROM cars");
 
         application.clickNextQuestion();
@@ -91,23 +73,7 @@
     });
 
     test("cannot go to next question if on last question", function() {
-        var queryExecutor = createQueryExecutor({
-            "SELECT model FROM cars": {
-                query: "SELECT model FROM cars",
-                table: {
-                    columnNames: ["model"],
-                    rows: [["Fabia"], ["Fox"]]
-                }
-            },
-            "SELECT color FROM cars": {
-                query: "SELECT color FROM cars",
-                table: {
-                    columnNames: ["color"],
-                    rows: [["Green"], ["Red"]]
-                }
-            }
-        });
-        var application = renderSampleQuestion(queryExecutor);
+        var application = renderSampleQuestion();
         application.submitQuery("SELECT model FROM cars");
         application.clickNextQuestion();
         application.submitQuery("SELECT color FROM cars");
@@ -115,16 +81,7 @@
     });
 
     test("cannot go to next question if answer is incorrect", function() {
-        var queryExecutor = createQueryExecutor({
-            "SELECT 1 as model": {
-                query: "SELECT model FROM cars",
-                table: {
-                    columnNames: ["model"],
-                    rows: [["1"]]
-                }
-            }
-        });
-        var application = renderSampleQuestion(queryExecutor);
+        var application = renderSampleQuestion();
         application.submitQuery("SELECT 1 as model");
 
         strictEqual(application.findNextQuestionButton(), null);
@@ -149,7 +106,31 @@
         element.dispatchEvent(evt);
     }
 
-    function renderSampleQuestion(queryExecutor) {
+    function renderSampleQuestion() {
+        var queryExecutor = createQueryExecutor({
+            "SELECT 1 as model": {
+                query: "SELECT model FROM cars",
+                table: {
+                    columnNames: ["model"],
+                    rows: [["1"]]
+                }
+            },
+            "SELECT model FROM cars": {
+                query: "SELECT model FROM cars",
+                table: {
+                    columnNames: ["model"],
+                    rows: [["Fabia"], ["Fox"]]
+                }
+            },
+            "SELECT color FROM cars": {
+                query: "SELECT color FROM cars",
+                table: {
+                    columnNames: ["color"],
+                    rows: [["Green"], ["Red"]]
+                }
+            }
+        });
+        
         var applicationElement = createEmptyDiv();
         learnsomesql.createLessonWidget(queryExecutor)({
             lesson: sampleLesson,
