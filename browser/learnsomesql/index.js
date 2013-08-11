@@ -8,7 +8,7 @@ var queryResultsTemplate = require("./query-results.html");
 var queryResultsWidget = widgetsKnockout.widget({
     init: function(options) {
         return {
-            viewModel: options.queryResults,
+            viewModel: {results: options.queryResults},
             template: queryResultsTemplate
         };
     }

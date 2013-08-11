@@ -85,7 +85,13 @@
         application.submitQuery("SELECT 1 as model");
 
         strictEqual(application.findNextQuestionButton(), null);
-        strictEqual("Wrong answer. Have another a go.", application.resultMessage());
+        strictEqual(application.resultMessage(), "Wrong answer. Have another a go.");
+    });
+
+    test("query errors are rendered in results", function() {
+        var application = renderSampleQuestion();
+        application.submitQuery("SELECTEROO");
+        strictEqual(application.resultError(), 'near "SELECTEROO": syntax error');
     });
     
     function readTable(element) {
@@ -128,6 +134,10 @@
                     columnNames: ["color"],
                     rows: [["Green"], ["Red"]]
                 }
+            },
+            "SELECTEROO": {
+                query: "SELECTEROO",
+                error: 'near "SELECTEROO": syntax error'
             }
         });
         
@@ -197,6 +207,10 @@
     
     Application.prototype.resultMessage = function() {
         return this.element.querySelector(".result p").textContent;
+    };
+    
+    Application.prototype.resultError = function() {
+        return this.element.querySelector(".result .error").textContent;
     };
 
     function createQueryExecutor(results) {
