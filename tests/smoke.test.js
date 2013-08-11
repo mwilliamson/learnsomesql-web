@@ -72,6 +72,15 @@
         strictEqual(application.questionDescription(), "Get the color of every car.");
     });
 
+    test("query is blanked when going to next question", function() {
+        var application = renderSampleQuestion();
+        application.submitQuery("SELECT model FROM cars");
+
+        application.clickNextQuestion();
+        strictEqual(application.currentQuery(), "");
+        strictEqual(application.executedQuery(), null);
+    });
+
     test("cannot go to next question if on last question", function() {
         var application = renderSampleQuestion();
         application.submitQuery("SELECT model FROM cars");
@@ -214,7 +223,8 @@
     };
     
     Application.prototype.executedQuery = function() {
-        return this.element.querySelector(".result .query").textContent;
+        var element = this.element.querySelector(".result .query");
+        return element === null ? null : element.textContent;
     };
     
     Application.prototype.resultTable = function() {

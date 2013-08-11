@@ -63,6 +63,8 @@ function QuestionViewModel(queryExecutor, questions, nextLesson) {
     });
     this.nextQuestion = function() {
         questionIndex(questionIndex() + 1);
+        self.query("");
+        self.submittedQueryResults(null);
     };
     this.isLastQuestion = knockout.computed(function() {
         return questionIndex() + 1 >= questions.length;
