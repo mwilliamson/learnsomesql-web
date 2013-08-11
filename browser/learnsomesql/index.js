@@ -1,4 +1,5 @@
 var knockout = require("knockout");
+var ajax = require("ajax");
 var deepEquals = require("equals");
 var widgetsKnockout = require("widgets-knockout");
 var lessonTemplate = require("./lesson-template.html");
@@ -90,3 +91,14 @@ function QuestionViewModel(queryExecutor, questions, nextLesson) {
         });
     };
 }
+
+exports.ajaxQueryExecutor = function(url) {
+    return function(query, callback) {
+        ajax({
+            type: "POST",
+            url: url,
+            data: {query: query},
+            success: callback
+        });
+    };
+};
