@@ -88,7 +88,7 @@
         application.submitQuery("SELECT color FROM cars");
         strictEqual(application.findNextQuestionButton(), null);
         strictEqual(application.findNextLessonButton().getAttribute("href"), "/lesson/select-star");
-        strictEqual(application.findNextLessonButton().textContent, "SELECT *");
+        strictEqual(application.findNextLessonButton().textContent, "Next lesson: SELECT *");
     });
 
     test("cannot go to next question if answer is incorrect", function() {
